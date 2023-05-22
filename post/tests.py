@@ -15,8 +15,8 @@ class PostTest(APITestCase):
         user =User.objects.create_user(email = 'user@gmail.com', password = '12345', is_active = True, name='test')
         self.token  ='12345'
         posts = [
-            Post(author = user, description='new post', name='post', category  = self.category, artist='artist1', song = 'song1'),
-            Post(author = user, description='new post2', name='post2', category  = self.category, artist='artist2', song='song2')
+            Post(author = user, name='post', category  = self.category, artist='artist1', song = 'song1'),
+            Post(author = user, name='post2', category  = self.category, artist='artist2', song='song2')
         ]
         Post.objects.bulk_create(posts)
         
@@ -40,7 +40,6 @@ class PostTest(APITestCase):
     def test_create(self):
         user = User.objects.all()[0]
         data = {
-            'description': 'test',
             'name': 'post1',
             'category': 'cat1',
             'song':'song',
