@@ -15,38 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from django.views.decorators.cache import cache_page
+
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.staticfiles.urls import static
+
 
 schema_view = get_schema_view(
-    openapi.Info(title='Притон',
-                 description='makers incubator',
-                 default_version='v1'),
-                 public=True)
+    openapi.Info(
+    title='Music',
+    description='Made in Makers',
+    default_version='v1'
+    ),
+    public=True
+)
 
-# schema_view = get_schema_view(
-#    openapi.Info(
-#       title="Snippets API",
-#       default_version='v1',
-#       description="Test description",
-#       terms_of_service="https://www.google.com/policies/terms/",
-#       contact=openapi.Contact(email="contact@snippets.local"),
-#       license=openapi.License(name="BSD License"),
-#    ),
-#    public=True,
-#    permission_classes=[permissions.AllowAny],
-# )
-# cached_urls = [
-#     path('api/v1/posts/', cache_page(60)(include('post.urls'))),
-#     # Другие URL-шаблоны, которые нужно кэшировать
-# ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/account/', include('account.urls')),
     path('api/v1/', include('post.urls')),
-    path('docs/',schema_view.with_ui('swagger'))
-    # re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/account/', include('account.urls')),
+    path('docs/', schema_view.with_ui('swagger')),
 ]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
